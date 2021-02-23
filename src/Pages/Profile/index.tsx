@@ -4,7 +4,7 @@ import {View, Text, StyleSheet} from 'react-native';
 const Profile: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text>Profile</Text>
+      <Text>settings</Text>
     </View>
   );
 };

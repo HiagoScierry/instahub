@@ -18,7 +18,7 @@ const Routes = () => {
       <Tab.Navigator
         initialRouteName="Search"
         tabBarOptions={{
-          activeTintColor: '#e91e63',
+          activeTintColor: '#212121',
           labelStyle: {
             fontSize: 14,
           },
