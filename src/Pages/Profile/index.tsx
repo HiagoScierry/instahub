@@ -8,6 +8,7 @@ import {
   Linking,
 } from 'react-native';
 import Axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from './styles';
 
@@ -24,6 +25,14 @@ interface IGithubUser {
 }
 
 interface IGithubRepos {
+  map(
+    arg0: (index: {
+      html_url: string;
+      id: number;
+      name: string;
+      description: string;
+    }) => JSX.Element,
+  ): React.ReactNode;
   [index: number]: {
     id: number;
     name: string;
@@ -36,11 +45,12 @@ const Profile: React.FC = () => {
   const [user, setUser] = useState<IGithubUser>({});
   const [repos, setRepos] = useState<IGithubRepos>([]);
 
+
   const getUserData = async () => {
     try {
-      const response = await Axios.get(
-        'https://api.github.com/users/HiagoScierry',
-      );
+      const user = await AsyncStorage.getItem('userInstaHub');
+      console.log(user);
+      const response = await Axios.get(`https://api.github.com/users/${user}`);
       setUser(response.data);
       if (response.status === 200) {
         const secondResponse = await Axios.get(response.data.repos_url);
@@ -51,7 +61,7 @@ const Profile: React.FC = () => {
     }
   };
 
-  const openUrl = async (url) => {
+  const openUrl = async (url: string) => {
     try {
       await Linking.openURL(url);
     } catch (error) {
@@ -89,17 +99,24 @@ const Profile: React.FC = () => {
           </View>
         </View>
       </View>
-      {repos.map((index) => {
-        return (
-          <TouchableOpacity
-            onPress={() => openUrl(index.html_url)}
-            key={index.id}
-            style={styles.containerCard}>
-            <Text style={styles.titleCard}>{index.name}</Text>
-            <Text style={styles.textCard}>{index.description}</Text>
-          </TouchableOpacity>
-        );
-      })}
+      {repos.map(
+        (index: {
+          html_url: string;
+          id: number;
+          name: string;
+          description: string;
+        }) => {
+          return (
+            <TouchableOpacity
+              onPress={() => openUrl(index.html_url)}
+              key={index.id}
+              style={styles.containerCard}>
+              <Text style={styles.titleCard}>{index.name}</Text>
+              <Text style={styles.textCard}>{index.description}</Text>
+            </TouchableOpacity>
+          );
+        },
+      )}
     </ScrollView>
   );
 };
