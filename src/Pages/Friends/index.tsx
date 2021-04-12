@@ -2,43 +2,15 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, Image, ScrollView} from 'react-native';
 import Axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useName} from '../../Context/user';
 
 import styles from './styles';
 
-interface IGithubFollower {
-  map(
-    arg0: (index: {
-      id: number;
-      avatar_url: string;
-      login: string;
-    }) => JSX.Element,
-  ): React.ReactNode;
-  [index: number]: {
-    id: number;
-    login: string;
-    avatar_url: string;
-  };
-}
-
 const Friends: React.FC = () => {
-  const [friends, setFriends] = useState<IGithubFollower>([]);
+  const {friends} = useName();
 
-  const getUserFriends = async () => {
-    try {
-      const user = await AsyncStorage.getItem('userInstaHub');
-      const response = await Axios.get(
-        `https://api.github.com/users/${user}/followers`,
-      );
-      setFriends(response.data);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+  
 
-  useEffect(() => {
-    getUserFriends();
-  }, []);
 
   return (
     <ScrollView

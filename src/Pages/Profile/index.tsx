@@ -8,67 +8,12 @@ import {
   Linking,
 } from 'react-native';
 import Axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useName} from '../../Context/user';
 
 import styles from './styles';
 
-interface IGithubUser {
-  login: string;
-  id: string;
-  avatar_url: string;
-  repos_url: string;
-  name: string;
-  bio: string;
-  public_repos: number;
-  followers: number;
-  following: number;
-}
-
-interface IGithubRepos {
-  map(
-    arg0: (index: {
-      html_url: string;
-      id: number;
-      name: string;
-      description: string;
-    }) => JSX.Element,
-  ): React.ReactNode;
-  [index: number]: {
-    id: number;
-    name: string;
-    description: string;
-    html_url: string;
-  };
-}
-
 const Profile: React.FC = () => {
-  const [user, setUser] = useState<IGithubUser>({
-    login: '',
-    id: '',
-    avatar_url: '',
-    repos_url: '',
-    name: '',
-    bio: '',
-    public_repos: 0,
-    followers: 0,
-    following: 0,
-  });
-  const [repos, setRepos] = useState<IGithubRepos>([]);
-
-  const getUserData = async () => {
-    try {
-      const user = await AsyncStorage.getItem('userInstaHub');
-      console.log(user);
-      const response = await Axios.get(`https://api.github.com/users/${user}`);
-      setUser(response.data);
-      if (response.status === 200) {
-        const secondResponse = await Axios.get(response.data.repos_url);
-        setRepos(secondResponse.data);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+  const {userData, repos} = useName();
 
   const openUrl = async (url: string) => {
     try {
@@ -78,31 +23,31 @@ const Profile: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    getUserData();
-  }, []);
-
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{
+        alignItems: 'center',
+      }}>
       <View style={styles.wrapper}>
         <View style={styles.header}>
-          <Image source={{uri: user.avatar_url}} style={styles.image} />
-          <Text style={styles.userName}>{user.login}</Text>
+          <Image source={{uri: userData.avatar_url}} style={styles.image} />
+          <Text style={styles.userName}>{userData.login}</Text>
         </View>
         <View style={styles.content}>
-          <Text style={styles.title}>{user.name}</Text>
-          <Text style={styles.text}>{user.bio}</Text>
+          <Text style={styles.title}>{userData.name}</Text>
+          <Text style={styles.text}>{userData.bio}</Text>
           <View style={styles.status}>
             <View style={styles.alignOneStatus}>
-              <Text style={styles.textStatus}>{user.public_repos}</Text>
+              <Text style={styles.textStatus}>{userData.public_repos}</Text>
               <Text style={styles.textStatus}>Repo</Text>
             </View>
             <View style={styles.alignOneStatus}>
-              <Text style={styles.textStatus}>{user.followers}</Text>
+              <Text style={styles.textStatus}>{userData.followers}</Text>
               <Text style={styles.textStatus}>Seguidores</Text>
             </View>
             <View style={styles.alignOneStatus}>
-              <Text style={styles.textStatus}>{user.following}</Text>
+              <Text style={styles.textStatus}>{userData.following}</Text>
               <Text style={styles.textStatus}>Seguindo</Text>
             </View>
           </View>
