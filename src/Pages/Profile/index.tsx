@@ -42,9 +42,18 @@ interface IGithubRepos {
 }
 
 const Profile: React.FC = () => {
-  const [user, setUser] = useState<IGithubUser>({});
+  const [user, setUser] = useState<IGithubUser>({
+    login: '',
+    id: '',
+    avatar_url: '',
+    repos_url: '',
+    name: '',
+    bio: '',
+    public_repos: 0,
+    followers: 0,
+    following: 0,
+  });
   const [repos, setRepos] = useState<IGithubRepos>([]);
-
 
   const getUserData = async () => {
     try {
