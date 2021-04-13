@@ -14,6 +14,6 @@ Um pequeno projeto em react native que utiliza a api do github para pesquisar o 
 
 ## Images
 
-![Home](./images/home.png)
-![Profile](./images/profile.png)
-![Home](./images/friends.png)
+<img src="./images/home.png" width="200"/>
+<img src="./images/friends.png" alt="drawing" width="200"/>
+<img src="./images/profile.png" alt="drawing" width="200"/>
