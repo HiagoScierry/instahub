@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   smallImage: {
     width: 40,
     height: 40,
-    borderRadius: 100,
+    borderRadius: 1000,
     resizeMode: 'contain',
     marginRight: 20,
   },

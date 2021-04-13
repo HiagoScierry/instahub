@@ -13,11 +13,10 @@ const Search: React.FC = () => {
   const user = useName();
   const navigation = useNavigation();
 
-  const [username, setUserName] = useState<string>(user.user);
+  const [username, setUserName] = useState<string>('');
 
   const setProfile = async () => {
     try {
-      console.log(username);
       user.setUser(username);
       navigation.navigate('Profile');
     } catch (error) {
